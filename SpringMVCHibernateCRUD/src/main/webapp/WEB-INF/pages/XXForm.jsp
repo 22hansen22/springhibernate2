@@ -10,33 +10,20 @@
 </head>
 <body>
     <div align="center">
-    
-    <h1>New/Edit Employee</h1>
-        <form:form action="saveEmployee" method="post" modelAttribute="employee">
+        <h1>New/Edit XX</h1>
+        <form:form action="saveXX" method="post" modelAttribute="xx">
         <table>
             <form:hidden path="id"/>
             <tr>
-                <td>Name:</td>
-                <td><form:input path="name" /></td>
+                <td>Title:</td>
+                <td><form:input path="title" /></td>
             </tr>
-            <tr>
-                <td>Email:</td>
-                <td><form:input path="email" /></td>
-            </tr>
-            <tr>
-                <td>Address:</td>
-                <td><form:input path="address" /></td>
-            </tr>
-            <tr>
-                <td>Telephone:</td>
-                <td><form:input path="telephone" /></td>
-            </tr>
+            
             <tr>
                 <td colspan="2" align="center"><input type="submit" value="Save"></td>
             </tr>
         </table>
         </form:form>
-        
     </div>
 </body>
 </html>

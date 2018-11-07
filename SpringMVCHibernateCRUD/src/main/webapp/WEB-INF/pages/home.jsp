@@ -34,9 +34,31 @@
 				</tr>
 			</c:forEach>
 		</table>
+		<br><br>
+		<table border="1">
+
+			<th>Id</th>
+			<th>Title</th>
+
+			<c:forEach var="xx" items="${listXX}">
+				<tr>
+
+					<td>${xx.id}</td>
+					<td>${xx.title}</td>
+					<td><a href="editXX?id=${xx.id}">Edit</a>
+						&nbsp;&nbsp;&nbsp;&nbsp; <a
+						href="deleteXX?id=${xx.id}">Delete</a></td>
+
+				</tr>
+			</c:forEach>
+		</table>
 		<h4>
 			New Employee Register <a href="newEmployee">here</a>
 		</h4>
+		<h4>
+			New XX <a href="newXX">here</a>
+		</h4>
+
 	</div>
 </body>
 </html>

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import com.jwt.model.Employee;
+import com.jwt.model.XX;
 import com.jwt.service.EmployeeService;
+import com.jwt.service.XXService;
 
 @Controller
 public class EmployeeController {
@@ -27,11 +29,18 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private XXService xxService;
 
 	@RequestMapping(value = "/")
 	public ModelAndView listEmployee(ModelAndView model) throws IOException {
 		List<Employee> listEmployee = employeeService.getAllEmployees();
 		model.addObject("listEmployee", listEmployee);
+
+		
+		List<XX> listXX = xxService.getAllXXs();
+		model.addObject("listXX", listXX);
+		
 		model.setViewName("home");
 		return model;
 	}

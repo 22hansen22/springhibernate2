@@ -13,8 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "EMP_TBL")
-public class Employee implements Serializable {
+@Table(name = "XX")
+public class XX implements Serializable {
 
 	private static final long serialVersionUID = -3465813074586302847L;
 	
@@ -25,16 +25,7 @@ public class Employee implements Serializable {
 	private int id;
 
 	@Column
-	private String name;
-
-	@Column
-	private String email;
-
-	@Column
-	private String address;
-
-	@Column
-	private String telephone;
+	private String title;
 
 	public int getId() {
 		return id;
@@ -44,43 +35,18 @@ public class Employee implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
-/***-----------------------------------------------------------------------------***/
+	/***-----------------------------------------------------------------------------***/
 	
-	@OneToMany(mappedBy = "employee")
+	@OneToMany(mappedBy = "xx")
 	private Set<EmployeeXX> employeeXXs = new HashSet<EmployeeXX>();
-	
     public Set<EmployeeXX> getUserGroups() {
         return employeeXXs;
     }
