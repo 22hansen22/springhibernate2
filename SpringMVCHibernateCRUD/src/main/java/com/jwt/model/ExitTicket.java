@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,19 +14,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "XX")
-public class XX implements Serializable {
+@Table(name = "EXITTICKET")
+public class ExitTicket implements Serializable {
 
 	private static final long serialVersionUID = -3465813074586302847L;
 	
 	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column
 	private String title;
+	
+	@Column
+	private String dateET;
 
 	public int getId() {
 		return id;
@@ -43,20 +46,29 @@ public class XX implements Serializable {
 		this.title = title;
 	}
 	
+	public String getDateET() {
+		return dateET;
+	}
+
+	public void setDateET(String dateET) {
+		this.dateET = dateET;
+	}
+
+
 	/***-----------------------------------------------------------------------------***/
 	
-	@OneToMany(mappedBy = "xx")
-	private Set<EmployeeXX> employeeXXs = new HashSet<EmployeeXX>();
-    public Set<EmployeeXX> getUserGroups() {
-        return employeeXXs;
+	@OneToMany(mappedBy = "exitTicket",cascade = CascadeType.ALL)
+	private Set<UserExitTicket> userExitTickets = new HashSet<UserExitTicket>();
+    public Set<UserExitTicket> getUserGroups() {
+        return userExitTickets;
     }
 
-    public void setUserGroups(Set<EmployeeXX> groups) {
-        this.employeeXXs = groups;
+    public void setUserGroups(Set<UserExitTicket> groups) {
+        this.userExitTickets = groups;
     } 
 
-    public void addUserGroup(EmployeeXX userGroup) {
-        this.employeeXXs.add(userGroup);
+    public void addUserGroup(UserExitTicket userGroup) {
+        this.userExitTickets.add(userGroup);
     }
 
 }

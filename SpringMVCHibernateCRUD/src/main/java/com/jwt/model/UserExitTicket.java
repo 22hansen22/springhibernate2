@@ -14,12 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "EMP_TBL_XX")
-public class EmployeeXX implements Serializable {
+@Table(name = "USEREXITTICKET")
+public class UserExitTicket implements Serializable {
 
 	private static final long serialVersionUID = -3465813074586302847L;
-    private Employee employee;
-    private XX xx;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +25,9 @@ public class EmployeeXX implements Serializable {
 
 	@Column
 	private String answer;
+	
+	@Column
+	private String dateAnswer;
 
 	public int getId() {
 		return id;
@@ -36,24 +37,28 @@ public class EmployeeXX implements Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "emp_tbl_id")  
-    public Employee getEmployee() {
-        return employee;
+	@ManyToOne
+    @JoinColumn(name = "userId")  
+    private User user;
+	
+    public User getUser() {
+        return user;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "xx_id")
-    public XX getXX() {
-        return xx;
+    @ManyToOne
+    @JoinColumn(name = "ticketId")
+    private ExitTicket exitTicket;
+    
+    public ExitTicket getExitTicket() {
+        return exitTicket;
     }
 
-    public void setXX(XX xx) {
-        this.xx = xx;
+    public void setExitTicket(ExitTicket exitTicket) {
+        this.exitTicket = exitTicket;
     }
 
 	
@@ -66,5 +71,15 @@ public class EmployeeXX implements Serializable {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
+
+	public String getDateAnswer() {
+		return dateAnswer;
+	}
+
+	public void setDateAnswer(String dateAnswer) {
+		this.dateAnswer = dateAnswer;
+	}
+	
+	
 
 }
