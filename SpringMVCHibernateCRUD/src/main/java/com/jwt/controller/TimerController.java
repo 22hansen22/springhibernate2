@@ -30,7 +30,7 @@ public class TimerController{
 	@RequestMapping(value = "/goUpMinutes")
 	public ModelAndView goUpMin(HttpSession session, @RequestParam("timeCountDown")int timeCountDown) {
 		ModelAndView mv = new ModelAndView();
-		if (timeCountDown < (99*60-60))
+		if (timeCountDown < (60*60-60))
 			timeCountDown+=60;
 		mv.addObject("timeCountDown", timeCountDown);
 		mv.setViewName("timer");
@@ -50,7 +50,7 @@ public class TimerController{
 	@RequestMapping(value = "/goUpSeconds")
 	public ModelAndView goUpSec(HttpSession session, @RequestParam("timeCountDown")int timeCountDown) {
 		ModelAndView mv = new ModelAndView();
-		if (timeCountDown < (99*60-30))
+		if (timeCountDown < (60*60-30))
 			timeCountDown+=30;
 		mv.addObject("timeCountDown", timeCountDown);
 		mv.setViewName("timer");

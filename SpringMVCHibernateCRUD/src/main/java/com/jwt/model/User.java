@@ -77,12 +77,12 @@ public class User implements Serializable {
 	}
 
 
-/***-----------------------------------------------------------------------------***/
+/***---------------------- for EXIT TICKET   ---------------------------------------***/
 	
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
 	private Set<UserExitTicket> userExitTickets = new HashSet<UserExitTicket>();
 	
-    public Set<UserExitTicket> getUserGroups() {
+   /* public Set<UserExitTicket> getUserGroups() {
         return userExitTickets;
     }
 
@@ -92,6 +92,23 @@ public class User implements Serializable {
 
     public void addUserGroup(UserExitTicket userGroup) {
         this.userExitTickets.add(userGroup);
+    }*/
+
+/***------------------------- for CLASS DAY --------------------------***/
+	
+	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+	private Set<UserClassDay> userClassDay = new HashSet<UserClassDay>();
+	
+   /* public Set<UserClassDay> getUserGroups() {
+        return userExitTickets;
     }
+
+    public void setUserGroups(Set<UserClassDay> groups) {
+        this.userExitTickets = groups;
+    } 
+
+    public void addUserGroup(UserClassDay userGroup) {
+        this.userExitTickets.add(userGroup);
+    }*/
 
 }

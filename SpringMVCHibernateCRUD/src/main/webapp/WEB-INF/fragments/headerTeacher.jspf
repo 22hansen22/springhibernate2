@@ -18,39 +18,36 @@
 <script type="text/javascript" src="<c:url value='/resources/js/TimeCircles.js' />"></script>
 
 <div class="navbar">
+
 	<a href="homeTeacher">
+		<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+		Home
+	</a> 
 	
-	<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-	Home</a> 
 	<a href="timer">
-	
-	<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-	Timer
-	
+		<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+		Timer
 	</a>
-	<a href="groupStudents">
-	<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
 	
-	Group Tool</a>
+	<a href="groupStudents">
+		<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+		Group Tool
+	</a>
+	
 	<a href="exitTicketTeacher">
 		<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
 		Exit Ticket
+	</a>
+
+	<a href="attendanceTeacher">
+		<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span>
+		Attendance
 	</a>
 
 	<a href="manageStudents">
 		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 		Manage Users / Administration
 	</a>
-	
-<!-- 	<div class="dropdown"> -->
-<!-- 		<button class="dropbtn"> -->
-<!-- 			Dropdown <i class="fa fa-caret-down"></i> -->
-<!-- 		</button> -->
-<!-- 		<div class="dropdown-content"> -->
-<!-- 			<a href="#">Link 1</a> <a href="#">Link 2</a> <a href="#">Link 3</a> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-	
 	
 	<a class="navbar-right" href="logout">
 		<span class="glyphicon glyphicon-off" aria-hidden="true"></span>

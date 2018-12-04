@@ -24,6 +24,10 @@
 		<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
 		Exit Ticket
 	</a>
+	<a href="attendanceStudent">
+		<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span>
+		Attendance
+	</a>
 	<a class="navbar-right" href="logout">
 		<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 		Logout

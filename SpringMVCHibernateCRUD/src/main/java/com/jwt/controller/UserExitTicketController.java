@@ -1,7 +1,9 @@
 package com.jwt.controller;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,18 +34,24 @@ public class UserExitTicketController {
 
 	@Autowired
 	private UserExitTicketService userExitTicketService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private ExitTicketService exitTicketService;
 
 	@RequestMapping(value = "/newUserExitTicket", method = RequestMethod.GET)
 	public ModelAndView newContact(ModelAndView model) {
 		UserExitTicket userExitTicket = new UserExitTicket();
 		model.addObject("userExitTicket", userExitTicket);
 		model.setViewName("userExitTicketForm");
+		getUserAndETLists(model);
 		return model;
 	}
 
 	@RequestMapping(value = "/saveUserExitTicket", method = RequestMethod.POST)
 	public ModelAndView saveUserExitTicket(@ModelAttribute UserExitTicket userExitTicket) {
-		if (userExitTicket.getId() == 0) { // if exitTicket id is 0 then creating the
+		if (userExitTicket.getId() == 0) { 
+			// if exitTicket id is 0 then creating the
 			// exitTicket other updating the exitTicket
 			userExitTicketService.addUserExitTicket(userExitTicket);
 		} else {
@@ -65,8 +73,28 @@ public class UserExitTicketController {
 		UserExitTicket userExitTicket = userExitTicketService.getUserExitTicket(exitTicketId);
 		ModelAndView model = new ModelAndView("userExitTicketForm");
 		model.addObject("userExitTicket", userExitTicket);
+		
+		getUserAndETLists(model);
 
 		return model;
+	}
+	
+	public void getUserAndETLists(ModelAndView m) {
+		// User ID
+		Map<Integer, Integer> userIdsList = new LinkedHashMap<Integer, Integer>();
+		List a = userService.listUserIds();
+		for (int i = 0; i < a.size(); i++) {
+			userIdsList.put((int) a.get(i), (int) a.get(i));
+		}
+		m.addObject("userIdsList", userIdsList);
+
+		// ExitTicket ID
+		Map<Integer, Integer> etIdsList = new LinkedHashMap<Integer, Integer>();
+		List b = exitTicketService.listExitTicketsIds();
+		for (int i = 0; i < b.size(); i++) {
+			etIdsList.put((int) b.get(i), (int) b.get(i));
+		}
+		m.addObject("etIdsList", etIdsList);
 	}
 
 }

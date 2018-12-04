@@ -80,11 +80,21 @@ public class GeneralController{
 	
 	
 	@RequestMapping(value = "/exitTicketTeacher")
-	public String goToSCT3(HttpSession session) {
+	public ModelAndView goToSCT3(HttpSession session) {
 		log.info("entro en Exit Ticket Teacher");
 		log.info("session "+session.getId());
-	    return "exitTicketTeacher";
+	    //return "exitTicketTeacher";
+	    return new ModelAndView("redirect:/user/exitTicketTeacher?showETList=showETList");
 	}	
+	
+	@RequestMapping(value = "/attendanceTeacher")
+	public ModelAndView goToSCT4(HttpSession session) {
+		log.info("entro en Exit Ticket Teacher");
+		log.info("session "+session.getId());
+	    //return "attendanceTeacher?showCDList=showCDList";
+	    return new ModelAndView("redirect:/user/attendanceTeacher?showCDList=showCDList");
+	}	
+	
 	
 	/*
 	

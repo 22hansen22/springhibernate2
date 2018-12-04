@@ -17,21 +17,21 @@
 	<div class="wrapper">
 		<div class="one">
 			<form method="GET">
-			<button type="submit" class="btn btn-primary btn-block" name="showETList" value="showETList">
+			<button type="submit" class="btn btn-primary btn-block" name="showCDList" value="showCDList">
 			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-			Search by Ticket list</button>
+			Search by Class Day</button>
 			</form>
 			<br><br><br>
 			<form method="GET">
-			<button type="submit" class="btn btn-primary btn-block" name="showETList" value="showUserList">
+			<button type="submit" class="btn btn-primary btn-block" name="showCDList" value="showUserList">
 			<span class="glyphicon glyphicon-inbox" aria-hidden="true"></span>
-			Search by user list</button>
+			Search by User</button>
 			</form>
 			<br><br><br>
 			<form method="GET">
-			<button type="submit" class="btn btn-primary btn-block" name="showETInput" value="showETInput">
+			<button type="submit" class="btn btn-primary btn-block" name="showCDInput" value="showCDInput">
 			<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-			Create a new Exit Ticket</button>
+			Create a new Class Date</button>
 			</form>
 		</div>
 		
@@ -40,48 +40,84 @@
 		</div>
 		
 		<div class="three">
-			<c:if test="${showETList == 'showETList'}">
-				<!-- TABLE WITH EXIT TICKETS -->
+			<c:if test="${showCDList == 'showCDList'}">
+				<!-- TABLE WITH EXIT TICKCDS -->
 				<table class="table table-striped table-hover"
 					style="background: #fff;">
 					<thead>
 						<tr>
-							<th>ID#</th>
-							<th>Exit Ticket Question</th>
 							<th>Date</th>
+							<th>Question</th>
+							<th>Password</th>
+							
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach var="rowData" items="${etList}" varStatus="status">
 							<tr>
-								<td>${rowData.id}</td>
-								<td>${rowData.title}
-								<c:if test="${not empty countList2}">
-								<span class="label label-pill label-success">${countList2[status.index]}</span>
-								</c:if>
+								<td>${rowData.dateClass}</td>
+								<td>${rowData.question}
+									<c:if test="${not empty countList2}">
+									<span class="label label-pill label-success">${countList2[status.index]}</span>
+									</c:if>
 								</td>
-								<td>${rowData.dateET}</td>
+								<td>
+									<!-- Button trigger modal FOR PASSWORD -->
+									<div style="float: right;">
+										<button class="btn btn-info" data-toggle="modal"
+											data-target="#myModal${status.index}">
+											<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+										</button>
+									</div> 
+									
+									<!-- Modal -->
+									<div class="modal fade" id="myModal${status.index}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal"
+														aria-hidden="true">&times;</button>
+													<h4 class="modal-title" id="myModalLabel">Password</h4>
+												</div>
+												<div class="modal-body">
+													<div class="jumbotron" align="center">
+  													<h1 class="display-4">${rowData.password}</h1>
+  													</div>
+												</div>
+												<div class="modal-footer">
+													<div style="float: right;">
+														<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+													</div>
+														
+				
+												</div>
+											</div>
+											<!-- /.modal-content -->
+										</div>
+										<!-- /.modal-dialog -->
+									</div> <!-- /.modal --> 
+								</td>
 								<td>
 									<div style="float: right;">
 										<form method="GET">
 											<input type="hidden" name="id" value="${rowData.id}" />
 											<button type="submit" class="btn btn-primary"
-												name="showETList" value="showUsersForET">View Responses</button>
+												name="showCDList" value="showUsersForCD">View Responses</button>
 										</form>
 									</div>
 								</td>
 								<td>
-								<!-- Button trigger modal -->
+								<!-- Button trigger modal FOR DELETE -->
 									<div style="float: right;">
 										<button class="btn btn-danger" data-toggle="modal"
-											data-target="#myModal">
+											data-target="#myModalDelete${status.index}">
 											<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 										</button>
 									</div> 
 									
 									<!-- Modal -->
-									<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal fade" id="myModalDelete${status.index}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 										<div class="modal-dialog">
 											<div class="modal-content">
 												<div class="modal-header">
@@ -96,13 +132,10 @@
 													<div style="float: left;">
 														<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
 													</div>
-														
-													<!-- 													<button type="button" class="btn btn-primary">Save -->
-													<!-- 														changes</button> -->
 													<form method="GET">
 														<input type="hidden" name="id" value="${rowData.id}" />
 														<button type="submit" class="btn btn-danger"
-															name="showETList" value="deleteItem" data-toggle="modal"
+															name="showCDList" value="deleteItem" data-toggle="modal"
 															data-target="#exampleModalCenter">DELETE</button>
 													</form>
 												</div>
@@ -111,6 +144,8 @@
 										</div>
 										<!-- /.modal-dialog -->
 									</div> <!-- /.modal --> 
+									
+									
 								</td>
 							</tr>
 						</c:forEach>
@@ -118,7 +153,7 @@
 				</table>
 			</c:if>
 
-			<c:if test="${showETList == 'showUserList'}">
+			<c:if test="${showCDList == 'showUserList'}">
 				<!-- TABLE WITH USERS -->
 				<table class="table table-striped table-hover"
 					style="background: #fff;">
@@ -145,7 +180,7 @@
 										<form method="GET">
 											<input type="hidden" name="id" value="${rowData.id}" />
 											<button type="submit" class="btn btn-primary"
-												name="showETList" value="showETForUser">View</button>
+												name="showCDList" value="showCDForUser">View</button>
 										</form>
 									</div>
 								</td>
@@ -155,13 +190,13 @@
 				</table>
 			</c:if>
 
-			<c:if test="${showETList == 'showUsersForET'}">
-				<!-- TABLE WITH USERS THAT HAVE THAT EXIT TICKET -->
+			<c:if test="${showCDList == 'showUsersForCD'}">
+				<!-- TABLE WITH USERS THAT HAVE THAT EXIT TICKCD -->
 				<table class="table table-striped table-hover"
 					style="background: #fff;">
 					<thead>
 						<tr>
-							<th>ET ID#</th>
+							<th>CD ID#</th>
 							<th>USER ID#</th>
 							<th>User Name</th>
 							<th>Answer</th>
@@ -169,9 +204,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="rowData" items="${usersForET}">
+						<c:forEach var="rowData" items="${usersForCD}">
 							<tr>
-								<td>${rowData.exitTicket.id}</td>
+								<td>${rowData.classDay.id}</td>
 								<td>${rowData.user.id}</td>
 								<td>${rowData.user.realname}</td>
 								<td>${rowData.answer}</td>
@@ -181,7 +216,7 @@
 					</tbody>
 				</table>
 				
-				<c:if test="${empty usersForET}">
+				<c:if test="${empty usersForCD}">
 					No entries to display<br><br>
 				</c:if>
 				
@@ -189,17 +224,18 @@
 				
 			</c:if>
 
-			<c:if test="${showETList == 'showETForUser'}">
-				<!-- TABLE OF EXIT TICKETs BY USER-->
+			<c:if test="${showCDList == 'showCDForUser'}">
+				<!-- TABLE OF EXIT TICKCDs BY USER-->
 				<table class="table table-striped table-hover"
 					style="background: #fff;">
 					<thead>
 						<tr>
 							<th>USER ID#</th>
 							<th>User Name</th>
-							<th>ET ID</th>
+							<th>CD ID</th>
 							<th>Answer</th>
-							<th>Date2</th>
+							<th>Date Question</th>
+							<th>Date Answer</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -207,14 +243,14 @@
 							<tr>
 								<td>${rowData.user.id}</td>
 								<td>${rowData.user.realname}</td>
-								<td>${rowData.exitTicket.id}</td>
+								<td>${rowData.classDay.id}</td>
 								<td>${rowData.answer}</td>
+								<td>${rowData.classDay.dateClass}</td>
 								<td>${rowData.dateAnswer}</td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
-				
 				<c:if test="${empty etForUsers}">
 					No entries to display<br><br>
 				</c:if>
@@ -224,16 +260,10 @@
 				
 			</c:if>
 			
-			<c:if test="${not empty showETInput}">
-<%-- 				<form method="GET"> --%>
-<!-- 					<textarea rows="3" class="form-control" id="questionExitT" hidden="true" placeholder="Enter question" name="questionExitT"> -->
-<!-- 					</textarea> -->
-<!-- 					<br> -->
-<!-- 					<button type="submit" class="btn btn-primary" name="group" value="Group">Send</button> -->
-<%-- 				</form> --%>
-				Entry ticket question:<br><br>
-				<form:form method = "GET" action = "exitTicketTeacher/addExitTicket">
-					<form:textarea path = "title" class="form-control" rows = "5" />
+			<c:if test="${not empty showCDInput}">
+				Class Day question (optional):<br><br>
+				<form:form method = "GET" action = "attendanceTeacher/addClassDay">
+					<form:textarea path = "question" class="form-control" rows = "5" />
 					<br>
 					<button type="submit" class="btn btn-primary" value="submit">Save</button>
 				</form:form>

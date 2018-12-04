@@ -10,29 +10,27 @@
 </head>
 <body>
     <div align="center">
-    
-    <h1>New/Edit User</h1>
-        <form:form action="saveUser" method="post" modelAttribute="user">
+        <h1>New/Edit UserClassDay</h1>
+        <form:form action="saveUserClassDay" method="post" modelAttribute="userClassDay">
         <table>
             <form:hidden path="id"/>
             <tr>
-                <td>UserName:</td>
-                <td><form:input path="name" /></td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td><form:input path="password" /></td>
-            </tr>
-            <tr>
-                <td>Type:</td>
+                <td>Id User:</td>
                 <td>
-                <form:select path="type" items="${typeList}" />                
+                
+                <form:select path="user.id" items="${userIdsList}" />  
+                </td>
+                
+                <td>Id ClassDay:</td>
+                <td>
+                <form:select path="classDay.id" items="${classDayIdsList}" />  
+                </td>
+                
+                <td>Answer:</td>
+                <td><form:input path="answer" />
                 </td>
             </tr>
-            <tr>
-                <td>Real Name:</td>
-                <td><form:input path="realname" /></td>
-            </tr>
+            
             <tr>
                 <td colspan="2" align="center"><input type="submit" value="Save">
                 <button action="action" type="button" onclick="history.go(-1);" class="btn btn-info">Back</button>
@@ -40,7 +38,6 @@
             </tr>
         </table>
         </form:form>
-        
     </div>
 </body>
 </html>

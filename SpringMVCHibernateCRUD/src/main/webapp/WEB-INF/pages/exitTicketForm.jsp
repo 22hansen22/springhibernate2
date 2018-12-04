@@ -18,9 +18,15 @@
                 <td>Title:</td>
                 <td><form:input path="title" /></td>
             </tr>
+            <tr>
+                <td>Date:</td>
+                <td><form:input path="dateET" type="date"/></td>
+            </tr>
             
             <tr>
-                <td colspan="2" align="center"><input type="submit" value="Save"></td>
+                <td colspan="2" align="center"><input type="submit" value="Save">
+                <button action="action" type="button" onclick="history.go(-1);" class="btn btn-info">Back</button>
+                </td>
             </tr>
         </table>
         </form:form>
