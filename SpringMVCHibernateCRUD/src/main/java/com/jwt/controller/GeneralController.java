@@ -20,6 +20,10 @@ import com.jwt.model.User;
 import com.jwt.model.UserExitTicket;
 import com.jwt.service.UserService;
 
+/*
+ * This class controls the general redirection from the site
+ * */
+
 @Controller
 @RequestMapping("/user")
 public class GeneralController{
@@ -39,16 +43,19 @@ public class GeneralController{
 	    return mv;
 	}
 	
-	// HOME redirection
+	// HOME redirection - will depend if student or teacher
 	@RequestMapping(value = {"/homeTeacher", "/homeStudent"})
-	public ModelAndView goToSCTX(HttpSession session) {
+	public ModelAndView goToHome(HttpSession session) {
 		try {
+			assert session.getAttribute("username").toString() instanceof String : "username not in cookie";
+			assert session.getAttribute("password").toString() instanceof String : "password not in cookie";
+			
 			log.info("s1 " + session.getAttribute("username").toString());
 			log.info("s2 " + session.getAttribute("password").toString());
 		} catch (Exception e) {
 			return new ModelAndView("redirect:/");
 		}
-		// if all the info is in the cookie
+		// if all the info is in the cookie -------------
 
 		ModelAndView mv = new ModelAndView();
 		User u = userService.getUserByNameAndPassword(session.getAttribute("username").toString(),
@@ -58,58 +65,27 @@ public class GeneralController{
 		mv.addObject("type", u.getType());
 		mv.addObject("userRealName", u.getRealname());
 
-		if (u.getType().equals("student"))
-			mv.setViewName("homeStudent");
-		else	
-			mv.setViewName("homeTeacher");
+		if (u.getType().equals("student"))		mv.setViewName("homeStudent");
+		else									mv.setViewName("homeTeacher");
+		
 		return mv;
 	}
-		
-	/*
-	@RequestMapping(value = "/exitTicketS")
-	public ModelAndView goToSCT2(HttpSession session) {
-		log.info("entro en Exit Ticket Student");
-		log.info("session "+session.getId());
-		List<ExitTicketEntry> etList = getList();
-		ModelAndView mv=new ModelAndView();
-		mv.setViewName("exitTicketS");
-    	mv.addObject("etList", etList);
-	    return mv;
-	}*/
-	
-	
 	
 	@RequestMapping(value = "/exitTicketTeacher")
-	public ModelAndView goToSCT3(HttpSession session) {
+	public ModelAndView goExitTicketTeacher(HttpSession session) {
 		log.info("entro en Exit Ticket Teacher");
 		log.info("session "+session.getId());
-	    //return "exitTicketTeacher";
+	    
 	    return new ModelAndView("redirect:/user/exitTicketTeacher?showETList=showETList");
 	}	
 	
 	@RequestMapping(value = "/attendanceTeacher")
-	public ModelAndView goToSCT4(HttpSession session) {
-		log.info("entro en Exit Ticket Teacher");
+	public ModelAndView goAttendanceTeacher(HttpSession session) {
+		log.info("entro en Attendance Teacher");
 		log.info("session "+session.getId());
-	    //return "attendanceTeacher?showCDList=showCDList";
+	    
 	    return new ModelAndView("redirect:/user/attendanceTeacher?showCDList=showCDList");
 	}	
-	
-	
-	/*
-	
-	
-	
-	private List<ExitTicketEntry> getList(){
-	    try {
-		    List<ExitTicketEntry> listET=exitTicketService.listExitTickets();
-		    log.info("Im out "+listET.size());
-		    return listET;
-	    }catch(Exception e) {
-		    log.error("Listing unsuccesful");
-	    	return null;
-	    }
-	}*/
 	
 	//logout
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)

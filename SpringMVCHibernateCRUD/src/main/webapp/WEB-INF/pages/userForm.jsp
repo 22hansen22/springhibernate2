@@ -17,11 +17,11 @@
             <form:hidden path="id"/>
             <tr>
                 <td>UserName:</td>
-                <td><form:input path="name" /></td>
+                <td><form:input path="name" required="required"/></td>
             </tr>
             <tr>
                 <td>Password:</td>
-                <td><form:input path="password" /></td>
+                <td><form:input path="password" required="required"/></td>
             </tr>
             <tr>
                 <td>Type:</td>
@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <td>Real Name:</td>
-                <td><form:input path="realname" /></td>
+                <td><form:input path="realname" required="required"/></td>
             </tr>
             <tr>
                 <td colspan="2" align="center"><input type="submit" value="Save">

@@ -42,7 +42,7 @@ public class ExitTicketController {
 	@Autowired
 	private UserExitTicketService userExitTicketService;
 
-	
+	//show form for creating an exit ticket
 	@RequestMapping(value={"/exitTicketTeacher"},params = "showETInput", method = RequestMethod.GET)
 	public ModelAndView showETInput(){    
 	    ModelAndView mv = new ModelAndView("exitTicketTeacher");
@@ -50,8 +50,10 @@ public class ExitTicketController {
 	    mv.addObject("command", new ExitTicket());
 	    return mv;
 	}
+	
+	// add an instance of Exit Ticket from the form
 	@RequestMapping(value = "/exitTicketTeacher/addExitTicket", method = RequestMethod.GET)
-	public String addUser(@ModelAttribute("SpringWeb") ExitTicket exitTicketEntry, ModelMap model) {
+	public String addExitTicket(@ModelAttribute("SpringWeb") ExitTicket exitTicketEntry) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 		LocalDate localDate = LocalDate.now();
 		exitTicketEntry.setDateET(dtf.format(localDate));	
@@ -60,6 +62,7 @@ public class ExitTicketController {
 		return "redirect:/user/exitTicketTeacher?showETList=showETList";
 	}
 	
+	//show list of Exit Tickets and Users
 	@RequestMapping(value={"/exitTicketTeacher"},params = "showETList", method = RequestMethod.GET)
 	public ModelAndView showETList(@RequestParam("showETList") String listType,@RequestParam(value="id", required=false) Integer id){    
 		log.info("entro en exitTicketT-showETList");
@@ -96,14 +99,15 @@ public class ExitTicketController {
 	    		return new ModelAndView("redirect:/user/exitTicketTeacher?showETList=showETList");
 	    	}
 	    }
-	    
 	    mv.addObject("headerx", headerx);
 	    log.info("param->"+listType);
 	    return mv;
 	}
 	
+	// Student section ----------------------------
+	
 	@RequestMapping(value = "/exitTicketStudent")
-	public ModelAndView goToSCT2(HttpSession session) {
+	public ModelAndView goExitTicketStudent(HttpSession session) {
 		List<ExitTicket> etList = exitTicketService.getAllExitTickets();
 		//order them by date
 		Collections.sort(etList, new SortByDate());
@@ -117,8 +121,9 @@ public class ExitTicketController {
     	mv.addObject("writtenYN", writtenYN);
 	    return mv;
 	}
+	
 	@RequestMapping(value={"/exitTicketStudent"},params = "showETInputStudent", method = RequestMethod.GET)
-	public ModelAndView showETInput2(@RequestParam(value="exitTicketId", required=false) Integer exitTicketId, HttpSession session){    
+	public ModelAndView showETInputStudent(@RequestParam(value="exitTicketId", required=false) Integer exitTicketId, HttpSession session){    
 		List<ExitTicket> etList = new ArrayList<ExitTicket>();
 		etList.add(exitTicketService.getExitTicket(exitTicketId));
 		
@@ -131,7 +136,7 @@ public class ExitTicketController {
 	}
 	
 	@RequestMapping(value = "/exitTicketStudent/addAnswerToUserExitTicket", method = RequestMethod.GET)
-	public String addAnswerToET(@ModelAttribute("SpringWeb") UserExitTicket userExitTicket, ModelMap model,HttpSession session,@RequestParam(value="exitTicketId", required=false) Integer exitTicketId) {
+	public String addAnswerToET(@ModelAttribute("SpringWeb") UserExitTicket userExitTicket, HttpSession session,@RequestParam(value="exitTicketId", required=false) Integer exitTicketId) {
 		userExitTicket.setUser(userService.getUser(Integer.parseInt(session.getAttribute("userId").toString())));
 		userExitTicket.setExitTicket(exitTicketService.getExitTicket(exitTicketId));
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
@@ -144,7 +149,7 @@ public class ExitTicketController {
 	}
 	
 	@RequestMapping(value={"/exitTicketStudent"},params = "showETStudent", method = RequestMethod.GET)
-	public ModelAndView showETInput3(@RequestParam(value="exitTicketId", required=false) Integer exitTicketId, HttpSession session){    
+	public ModelAndView showETStudent(@RequestParam(value="exitTicketId", required=false) Integer exitTicketId, HttpSession session){    
 		List<ExitTicket> etList = new ArrayList<ExitTicket>();
 		etList.add(exitTicketService.getExitTicket(exitTicketId));
 		
@@ -158,18 +163,6 @@ public class ExitTicketController {
 	    mv.addObject("command", uET);
 	    return mv;
 	}
-	
-//	@RequestMapping(value={"/exitTicketStudent"},params = "showETList", method = RequestMethod.GET)
-//	public ModelAndView showETListStudent(@RequestParam("showETList") String listType,@RequestParam(value="id", required=false) Integer id){
-//		ModelAndView mv = new ModelAndView("exitTicketStudent");
-//		if(listType.equals("editET")) {
-//			mv.addObject("command", new UserExitTicket());
-//			mv.addObject("showETInputStudent", true);
-//			
-//		}
-//		return mv;
-//	}
-	
 	
 	
 	//---------------------------------------------------------------------------------------------------------
@@ -185,6 +178,13 @@ public class ExitTicketController {
 
 	@RequestMapping(value = "/saveExitTicket", method = RequestMethod.POST)
 	public ModelAndView saveExitTicket(@ModelAttribute ExitTicket exitTicket) {
+		//if date incorrect/empty -> selecting today
+		if (exitTicket.getDateET() == "") {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+			LocalDate localDate = LocalDate.now();
+			exitTicket.setDateET(dtf.format(localDate));
+		}
+		
 		if (exitTicket.getId() == 0) { // if exitTicket id is 0 then creating the
 			// exitTicket other updating the exitTicket
 			exitTicketService.addExitTicket(exitTicket);
@@ -202,7 +202,7 @@ public class ExitTicketController {
 	}
 
 	@RequestMapping(value = "/editExitTicket", method = RequestMethod.GET)
-	public ModelAndView editContact(HttpServletRequest request) {
+	public ModelAndView editExitTicket(HttpServletRequest request) {
 		int exitTicketId = Integer.parseInt(request.getParameter("id"));
 		ExitTicket exitTicket = exitTicketService.getExitTicket(exitTicketId);
 		ModelAndView model = new ModelAndView("exitTicketForm");
@@ -211,7 +211,7 @@ public class ExitTicketController {
 		return model;
 	}
 	
-	// AUX methods -----------------------------------------
+	// AUXiliary  methods -----------------------------------------
 	
 	private List<Integer> getNumberOfETPerUser(){
 		List<Integer> output=new ArrayList();

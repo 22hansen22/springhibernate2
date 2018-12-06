@@ -1,6 +1,8 @@
 package com.jwt.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +42,7 @@ public class UserExitTicketController {
 	private ExitTicketService exitTicketService;
 
 	@RequestMapping(value = "/newUserExitTicket", method = RequestMethod.GET)
-	public ModelAndView newContact(ModelAndView model) {
+	public ModelAndView newUserExitTicket(ModelAndView model) {
 		UserExitTicket userExitTicket = new UserExitTicket();
 		model.addObject("userExitTicket", userExitTicket);
 		model.setViewName("userExitTicketForm");
@@ -50,6 +52,21 @@ public class UserExitTicketController {
 
 	@RequestMapping(value = "/saveUserExitTicket", method = RequestMethod.POST)
 	public ModelAndView saveUserExitTicket(@ModelAttribute UserExitTicket userExitTicket) {
+		// if date incorrect/empty -> selecting today
+		if (userExitTicket.getDateAnswer() == "") {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+			LocalDate localDate = LocalDate.now();
+			userExitTicket.setDateAnswer(dtf.format(localDate));
+		}
+		
+		// if date incorrect/empty -> selecting today
+		if (userExitTicket.getExitTicket().getDateET() == "") {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+			LocalDate localDate = LocalDate.now();
+			userExitTicket.getExitTicket().setDateET(dtf.format(localDate));
+		}
+		
+		
 		if (userExitTicket.getId() == 0) { 
 			// if exitTicket id is 0 then creating the
 			// exitTicket other updating the exitTicket
@@ -68,7 +85,7 @@ public class UserExitTicketController {
 	}
 
 	@RequestMapping(value = "/editUserExitTicket", method = RequestMethod.GET)
-	public ModelAndView editContact(HttpServletRequest request) {
+	public ModelAndView editUserExitTicket(HttpServletRequest request) {
 		int exitTicketId = Integer.parseInt(request.getParameter("id"));
 		UserExitTicket userExitTicket = userExitTicketService.getUserExitTicket(exitTicketId);
 		ModelAndView model = new ModelAndView("userExitTicketForm");

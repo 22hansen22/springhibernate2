@@ -1,6 +1,8 @@
 package com.jwt.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +42,9 @@ public class UserClassDayController {
 	@Autowired
 	private ClassDayService classDayService;
 
+	//redirect to the form to be able to add a new User Class Day
 	@RequestMapping(value = "/newUserClassDay", method = RequestMethod.GET)
-	public ModelAndView newContact(ModelAndView model) {
+	public ModelAndView newUserClassDay(ModelAndView model) {
 		UserClassDay userClassDay = new UserClassDay();
 		model.addObject("userClassDay", userClassDay);
 		model.setViewName("userClassDayForm");
@@ -49,8 +52,23 @@ public class UserClassDayController {
 		return model;
 	}
 
+	//save the User Class Day entity to the DB
 	@RequestMapping(value = "/saveUserClassDay", method = RequestMethod.POST)
 	public ModelAndView saveUserClassDay(@ModelAttribute UserClassDay userClassDay) {
+		// if date incorrect/empty -> selecting today
+		if (userClassDay.getDateAnswer() == "") {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+			LocalDate localDate = LocalDate.now();
+			userClassDay.setDateAnswer(dtf.format(localDate));
+		}
+		
+		// if date incorrect/empty -> selecting today
+		if (userClassDay.getClassDay().getDateClass() == "") {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+			LocalDate localDate = LocalDate.now();
+			userClassDay.getClassDay().setDateClass(dtf.format(localDate));
+		}
+		
 		if (userClassDay.getId() == 0) { 
 			userClassDayService.addUserClassDay(userClassDay);
 		} else {
@@ -59,6 +77,7 @@ public class UserClassDayController {
 		return new ModelAndView("redirect:/user/manageStudents");
 	}
 
+	// Delete from the DB that specific User Class Day
 	@RequestMapping(value = "/deleteUserClassDay", method = RequestMethod.GET)
 	public ModelAndView deleteUserClassDay(HttpServletRequest request) {
 		int classDayId = Integer.parseInt(request.getParameter("id"));
@@ -66,8 +85,9 @@ public class UserClassDayController {
 		return new ModelAndView("redirect:/user/manageStudents");
 	}
 
+	//edit the User Class Day knowing the ID
 	@RequestMapping(value = "/editUserClassDay", method = RequestMethod.GET)
-	public ModelAndView editContact(HttpServletRequest request) {
+	public ModelAndView editUserClassDay(HttpServletRequest request) {
 		int classDayId = Integer.parseInt(request.getParameter("id"));
 		UserClassDay userClassDay = userClassDayService.getUserClassDay(classDayId);
 		ModelAndView model = new ModelAndView("userClassDayForm");
@@ -76,6 +96,7 @@ public class UserClassDayController {
 		return model;
 	}
 	
+	//obtain the lists for userIdsList and classDayIdsList
 	public void getUserAndETLists(ModelAndView m) {
 		// User ID
 		Map<Integer, Integer> userIdsList = new LinkedHashMap<Integer, Integer>();

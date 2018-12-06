@@ -44,6 +44,7 @@ public class ClassDayController {
 	@Autowired
 	private UserClassDayService userClassDayService;
 	
+	//show form for creating a class day
 	@RequestMapping(value={"/attendanceTeacher"},params = "showCDInput", method = RequestMethod.GET)
 	public ModelAndView showCDInput(){    
 	    ModelAndView mv = new ModelAndView("attendanceTeacher");
@@ -52,45 +53,45 @@ public class ClassDayController {
 	    return mv;
 	}
 	
+	// add an instance of class Day from the form
 	@RequestMapping(value = "/attendanceTeacher/addClassDay", method = RequestMethod.GET)
-	public String addUser(@ModelAttribute("SpringWeb") ClassDay classDay, ModelMap model) {
+	public String addClassDay(@ModelAttribute("SpringWeb") ClassDay classDay) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 		LocalDate localDate = LocalDate.now();
 		classDay.setDateClass(dtf.format(localDate));	
 		classDay.setPassword(createRandomCode(4, "123456789ABCDEFGHIJ"));
-		
+	
 		classDayService.addClassDay(classDay);
 		
 		return "redirect:/user/attendanceTeacher?showCDList=showCDList";
 	}
 	
+	//show list of Class Days and Users
 	@RequestMapping(value={"/attendanceTeacher"},params = "showCDList", method = RequestMethod.GET)
 	public ModelAndView showCDList(@RequestParam("showCDList") String listType,@RequestParam(value="id", required=false) Integer id){    
 		log.info("entro en ClassDay -showCDList");
 	    ModelAndView mv = new ModelAndView("attendanceTeacher");
 	    mv.addObject("showCDList", listType);
 	    
-	    String headerx="";
 	    if(listType.equals("showCDList")) {
-	    	List<ClassDay> etList = classDayService.getAllClassDays();
-	    	Collections.sort(etList, new SortByDateClassDay());
-			Collections.reverse(etList);
-			
-	    	mv.addObject("etList", etList);
-    		mv.addObject("countList2", getNumberOfUsersPerCD());
+	    	List<ClassDay> cdList = classDayService.getAllClassDays();
+	    	Collections.sort(cdList, new SortByDateClassDay());
+			Collections.reverse(cdList);
+	    	mv.addObject("cdList", cdList);
+    		mv.addObject("countUsersPerCD", getNumberOfUsersPerCD());
 	    }
 	    else if(listType.equals("showUserList")) {
 	    	List<User> usersList = userService.getAllStudents();
     		mv.addObject("usersList", usersList);
-    		mv.addObject("countList", getNumberOfCDPerUser());
+    		mv.addObject("countCDPerUser", getNumberOfCDPerUser());
 	    }
 	    else if(listType.equals("showUsersForCD")) {
 	    	List<UserClassDay> usersForCD = getListUserByCD(id);
 	    	mv.addObject("usersForCD", usersForCD);
 	    }
 	    else if(listType.equals("showCDForUser")) {
-	    	List<UserClassDay> etForUsers = getListCDByUser(id);
-	    	mv.addObject("etForUsers", etForUsers);
+	    	List<UserClassDay> cdForUsers = getListCDByUser(id);
+	    	mv.addObject("cdForUsers", cdForUsers);
 	    }
 	    else if(listType.equals("deleteItem")) {
 	    	if (id!=null) {
@@ -101,50 +102,50 @@ public class ClassDayController {
 	    	}
 	    }
 	    
-	    mv.addObject("headerx", headerx);
 	    log.info("param->"+listType);
 	    return mv;
 	}
 	
 	@RequestMapping(value = "/attendanceStudent")
-	public ModelAndView goToSCT2(HttpSession session) {
-		List<ClassDay> etList = classDayService.getAllClassDays();
+	public ModelAndView attendanceStudent(HttpSession session) {
+		List<ClassDay> cdList = classDayService.getAllClassDays();
+		
 		//order them by date
-		Collections.sort(etList, new SortByDateClassDay());
-		Collections.reverse(etList);
+		Collections.sort(cdList, new SortByDateClassDay());
+		Collections.reverse(cdList);
 		int userId=Integer.parseInt(session.getAttribute("userId").toString());
-		List<Boolean> writtenYN = userClassDayService.getWrittenYN(etList,userId);
+		List<Boolean> writtenYN = userClassDayService.getWrittenYN(cdList,userId);
 		
 		ModelAndView mv=new ModelAndView();
 		mv.setViewName("attendanceStudent");
-    	mv.addObject("etList", etList);
+    	mv.addObject("cdList", cdList);
     	mv.addObject("writtenYN", writtenYN);
 	    return mv;
 	}
 	
+	// Student section ----------------------------
+	
 	@RequestMapping(value={"/attendanceStudent"},params = "showCDInputStudent", method = RequestMethod.GET)
-	public ModelAndView showCDInput2(@RequestParam(value="classDayId", required=false) Integer classDayId,@RequestParam(value="password", required=false) String password, HttpSession session){    
+	public ModelAndView showCDInputStudent(@RequestParam(value="classDayId", required=false) Integer classDayId,@RequestParam(value="password", required=false) String password, HttpSession session){    
 		if (password==null)	password="";
-		List<ClassDay> etList = new ArrayList<ClassDay>();
+		List<ClassDay> cdList = new ArrayList<ClassDay>();
 		ClassDay cd=classDayService.getClassDay(classDayId);
 		
 		if(password.equals(cd.getPassword())) {
 			ModelAndView mv = new ModelAndView("attendanceStudent");
-			etList.add(classDayService.getClassDay(classDayId));
+			cdList.add(classDayService.getClassDay(classDayId));
 			mv.addObject("showCDInputStudent", true);
 			mv.addObject("classDayId", classDayId);
 			mv.addObject("command", new UserClassDay());
-			mv.addObject("etList", etList);	
+			mv.addObject("cdList", cdList);	
 			return mv;
 		}
 		else 	
 			return new ModelAndView("redirect:/user/attendanceStudent");
-		
-	    
 	}
 	
 	@RequestMapping(value = "/attendanceStudent/addAnswerToUserClassDay", method = RequestMethod.GET)
-	public String addAnswerToCD(@ModelAttribute("SpringWeb") UserClassDay userClassDay, ModelMap model,HttpSession session,@RequestParam(value="classDayId", required=false) Integer classDayId) {
+	public String addAnswerToCD(@ModelAttribute("SpringWeb") UserClassDay userClassDay,HttpSession session,@RequestParam(value="classDayId", required=false) Integer classDayId) {
 		userClassDay.setUser(userService.getUser(Integer.parseInt(session.getAttribute("userId").toString())));
 		userClassDay.setClassDay(classDayService.getClassDay(classDayId));
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
@@ -157,29 +158,29 @@ public class ClassDayController {
 	}
 	
 	@RequestMapping(value={"/attendanceStudent"},params = "showCDStudent", method = RequestMethod.GET)
-	public ModelAndView showCDInput3(@RequestParam(value="classDayId", required=false) Integer classDayId, HttpSession session){    
-		List<ClassDay> etList = new ArrayList<ClassDay>();
-		etList.add(classDayService.getClassDay(classDayId));
+	public ModelAndView showCDStudent(@RequestParam(value="classDayId", required=false) Integer classDayId, HttpSession session){    
+		List<ClassDay> cdList = new ArrayList<ClassDay>();
+		cdList.add(classDayService.getClassDay(classDayId));
 		
 	    ModelAndView mv = new ModelAndView("attendanceStudent");
 	    mv.addObject("showCDStudent", true);
 	    mv.addObject("classDayId", classDayId);
 	    UserClassDay uCD=userClassDayService.getUserClassDayByUserAndCD(classDayId,Integer.parseInt(session.getAttribute("userId").toString()));
 		
-		mv.addObject("etList", etList);
+		mv.addObject("cdList", cdList);
 	    mv.addObject("answerCD", uCD.getAnswer());
 	    mv.addObject("command", uCD);
 	    return mv;
 	}
 
 	
-	
 	//---------------------------------------------------------------------------------------------------------
-	//functionality to add edit and delete Exit Tickets from the manage Users
+	//functionality to add edit and delete Class Days from the manage Users
 
 	@RequestMapping(value = "/newClassDay", method = RequestMethod.GET)
 	public ModelAndView newClassDay(ModelAndView model) {
 		ClassDay classDay = new ClassDay();
+		classDay.setPassword(createRandomCode(4, "123456789ABCDEFGHIJ"));
 		model.addObject("classDay", classDay);
 		model.setViewName("classDayForm");
 		return model;
@@ -187,6 +188,13 @@ public class ClassDayController {
 
 	@RequestMapping(value = "/saveClassDay", method = RequestMethod.POST)
 	public ModelAndView saveClassDay(@ModelAttribute ClassDay classDay) {
+		//if date incorrect/empty -> selecting today
+		if(classDay.getDateClass()=="") {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+			LocalDate localDate = LocalDate.now();
+			classDay.setDateClass(dtf.format(localDate));	
+		} 
+		
 		if (classDay.getId() == 0) { // if classDay id is 0 then creating the
 			// classDay other updating the classDay
 			classDayService.addClassDay(classDay);
@@ -204,7 +212,7 @@ public class ClassDayController {
 	}
 
 	@RequestMapping(value = "/editClassDay", method = RequestMethod.GET)
-	public ModelAndView editContact(HttpServletRequest request) {
+	public ModelAndView editClassDay(HttpServletRequest request) {
 		int classDayId = Integer.parseInt(request.getParameter("id"));
 		ClassDay classDay = classDayService.getClassDay(classDayId);
 		ModelAndView model = new ModelAndView("classDayForm");
@@ -213,7 +221,7 @@ public class ClassDayController {
 		return model;
 	}
 	
-	// AUX methods -----------------------------------------
+	// AUXiliary  methods -----------------------------------------
 
 	private List<Integer> getNumberOfCDPerUser(){
 		List<Integer> output=new ArrayList();
@@ -254,9 +262,7 @@ public class ClassDayController {
 	}
 	
 	public static String createRandomCode(int codeLength, String id) {
-
 	    return new SecureRandom().ints(codeLength, 0, id.length()).mapToObj(id::charAt).map(Object::toString).collect(Collectors.joining());
-
 	}
 
 }

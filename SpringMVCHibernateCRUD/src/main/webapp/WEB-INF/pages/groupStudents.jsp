@@ -12,10 +12,10 @@
 	<div class="wrapper">
 		<div class="one">
 		This is the list of Students in class:<br><br>
-			<c:if test="${not empty lists}">
+			<c:if test="${not empty listRealNames}">
 				<ul class="list-group-item">
-					<c:forEach items="${lists}" var="lists">
-						<li class="list-group-item">${lists}</li>
+					<c:forEach items="${listRealNames}" var="listRealNames">
+						<li class="list-group-item">${listRealNames}</li>
 					</c:forEach>
 				</ul>
 			</c:if>
@@ -39,8 +39,8 @@
 		</div>
 		
 		<div class="three">
-			<c:if test="${not empty slists}">
-			<c:forEach var="rowData" items="${slists}" varStatus="l1">
+			<c:if test="${not empty listOfGroups}">
+			<c:forEach var="rowData" items="${listOfGroups}" varStatus="l1">
 				<div style="float:left; margin-left:15px; margin-top:10px;">
 				
 				<ul class="list-group-item">

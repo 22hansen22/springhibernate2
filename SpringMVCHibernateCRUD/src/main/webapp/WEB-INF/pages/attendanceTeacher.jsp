@@ -54,12 +54,12 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="rowData" items="${etList}" varStatus="status">
+						<c:forEach var="rowData" items="${cdList}" varStatus="status">
 							<tr>
 								<td>${rowData.dateClass}</td>
 								<td>${rowData.question}
-									<c:if test="${not empty countList2}">
-									<span class="label label-pill label-success">${countList2[status.index]}</span>
+									<c:if test="${not empty countUsersPerCD}">
+									<span class="label label-pill label-success">${countUsersPerCD[status.index]}</span>
 									</c:if>
 								</td>
 								<td>
@@ -170,7 +170,7 @@
 								<td>${rowData.id}</td>
 								<td>${rowData.realname}
 								
-								<c:if test="${not empty countList}">
+								<c:if test="${not empty countCDPerUser}">
 								<span class="label label-pill label-primary">${countList[status.index]}</span>
 								</c:if>
 								</td>
@@ -239,7 +239,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="rowData" items="${etForUsers}">
+						<c:forEach var="rowData" items="${cdForUsers}">
 							<tr>
 								<td>${rowData.user.id}</td>
 								<td>${rowData.user.realname}</td>
@@ -251,7 +251,7 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				<c:if test="${empty etForUsers}">
+				<c:if test="${empty cdForUsers}">
 					No entries to display<br><br>
 				</c:if>
 				

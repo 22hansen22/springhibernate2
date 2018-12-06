@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,8 @@ public class UserExitTicketDAOImpl implements UserExitTicketDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger log = Logger.getLogger(UserExitTicketDAOImpl.class);
 
 	public void addUserExitTicket(UserExitTicket userExitTicket) {
 		ExitTicket exitTicket = (ExitTicket) sessionFactory.getCurrentSession().get(ExitTicket.class, userExitTicket.getExitTicket().getId());
@@ -62,7 +65,7 @@ public class UserExitTicketDAOImpl implements UserExitTicketDAO {
 		    List<UserExitTicket> list = (List<UserExitTicket>)query.list();
 		    return list;
 	    }catch(Exception e) {
-			//log.error("An error occurred while querying the database", e);	
+			log.error("An error occurred while querying the database", e);	
 	    }
 		return null;
 	}
@@ -75,7 +78,7 @@ public class UserExitTicketDAOImpl implements UserExitTicketDAO {
 		    List<UserExitTicket> list = (List<UserExitTicket>)query.list();
 		    return list;
 	    }catch(Exception e) {
-			//log.error("An error occurred while querying the database", e);	
+			log.error("An error occurred while querying the database", e);	
 	    }
 		return null;
 		

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.jwt.model.User;
@@ -14,6 +15,9 @@ public class UserDAOImpl implements UserDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger log = Logger
+			.getLogger(UserDAOImpl.class);
 
 	public void addUser(User user) {
 		sessionFactory.getCurrentSession().saveOrUpdate(user);
@@ -22,7 +26,6 @@ public class UserDAOImpl implements UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<User> getAllUsers() {
-
 		return sessionFactory.getCurrentSession().createQuery("from User")
 				.list();
 	}
@@ -51,7 +54,6 @@ public class UserDAOImpl implements UserDAO {
 	@SuppressWarnings( { "unchecked", "deprecation" } )
 	public boolean findUser(String uname,String upwd) {
 		boolean isValidUser = false;
-		//String sqlQuery = "from User u where u.name = "+uname+ " and u.password = "+upwd;
 		try {
 			Query query = sessionFactory.getCurrentSession().createQuery(" FROM User u WHERE u.name = :uname AND u.password = :upwd ");
 			query.setString("uname", uname);
@@ -78,7 +80,7 @@ public class UserDAOImpl implements UserDAO {
 					List<User> userObj = (List<User>) query.list();
 					return userObj.get(0);
 				} catch(Exception e) {
-					//logger.error("An error occurred while fetching the user details from the database2", e);	
+					log.error("An error occurred while fetching the user details from the database2", e);	
 				}
 				
 			}
@@ -97,7 +99,7 @@ public class UserDAOImpl implements UserDAO {
 		    }
 		    return listOfUserIDs;
 	    }catch(Exception e) {
-			//log.error("An error occurred while querying the database", e);	
+			log.error("An error occurred while querying the database", e);	
 	    }
 		return null;
 	}
@@ -111,7 +113,7 @@ public class UserDAOImpl implements UserDAO {
 		    
 		    return listOfStudents;
 	    }catch(Exception e) {
-			//log.error("An error occurred while querying the database", e);	
+			log.error("An error occurred while querying the database", e);	
 	    }
 		return null;
 	}

@@ -31,7 +31,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="rowData" items="${etList}" varStatus="status">
+						<c:forEach var="rowData" items="${cdList}" varStatus="status">
 							<tr>
 								<td>${rowData.id}</td>
 								<td>${rowData.question}</td>

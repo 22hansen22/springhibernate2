@@ -6,10 +6,12 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.jwt.model.User;
+import com.jwt.controller.ClassDayController;
 import com.jwt.model.ClassDay;
 import com.jwt.model.SortByDate;
 import com.jwt.model.SortByDateClassDay;
@@ -19,6 +21,9 @@ public class ClassDayDAOImpl implements ClassDayDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger log = Logger
+			.getLogger(ClassDayDAOImpl.class);
 
 	public void addClassDay(ClassDay classDay) {
 		sessionFactory.getCurrentSession().saveOrUpdate(classDay);
@@ -66,7 +71,7 @@ public class ClassDayDAOImpl implements ClassDayDAO {
 		    }
 		    return listOfClassDayIDs;
 	    }catch(Exception e) {
-			//log.error("An error occurred in listClassDaysIds -", e);	
+			log.error("An error occurred in listClassDaysIds -", e);	
 	    }
 		return null;
 	}

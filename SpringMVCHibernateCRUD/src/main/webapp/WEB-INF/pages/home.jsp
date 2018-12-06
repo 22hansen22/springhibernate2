@@ -13,8 +13,9 @@
 <body>
 
 	<div class="container">
-		<h3 id="form_header" class="text-warning" align="center">Login
-			Application</h3>
+		<h3 id="form_header" class="text-warning" align="center">
+			Login Application
+		</h3>
 		<div>&nbsp;</div>
 
 		<!-- User input form to validate a user -->

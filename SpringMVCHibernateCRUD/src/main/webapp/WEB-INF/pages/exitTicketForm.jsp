@@ -16,11 +16,11 @@
             <form:hidden path="id"/>
             <tr>
                 <td>Title:</td>
-                <td><form:input path="title" /></td>
+                <td><form:input path="title" required="required" /></td>
             </tr>
             <tr>
                 <td>Date:</td>
-                <td><form:input path="dateET" type="date"/></td>
+                <td><form:input path="dateET" type="date" required="required"/></td>
             </tr>
             
             <tr>

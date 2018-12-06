@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,9 @@ public class UserClassDayDAOImpl implements UserClassDayDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger log = Logger
+			.getLogger(UserClassDayDAOImpl.class);
 
 	public void addUserClassDay(UserClassDay userClassDay) {
 		ClassDay classDay = (ClassDay) sessionFactory.getCurrentSession().get(ClassDay.class, userClassDay.getClassDay().getId());
@@ -62,7 +66,7 @@ public class UserClassDayDAOImpl implements UserClassDayDAO {
 		    List<UserClassDay> list = (List<UserClassDay>)query.list();
 		    return list;
 	    }catch(Exception e) {
-			//log.error("An error occurred while querying the database", e);	
+			log.error("An error occurred while querying the database", e);	
 	    }
 		return null;
 	}
@@ -75,7 +79,7 @@ public class UserClassDayDAOImpl implements UserClassDayDAO {
 		    List<UserClassDay> list = (List<UserClassDay>)query.list();
 		    return list;
 	    }catch(Exception e) {
-			//log.error("An error occurred while querying the database", e);	
+			log.error("An error occurred while querying the database", e);	
 	    }
 		return null;
 		

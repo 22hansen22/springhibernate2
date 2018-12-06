@@ -16,7 +16,7 @@
             <form:hidden path="id"/>
             <tr>
                 <td>Password:</td>
-                <td><form:input path="password" /></td>
+                <td><form:input path="password" required="required"/></td>
             </tr>
             <tr>
                 <td>Question:</td>
@@ -24,7 +24,7 @@
             </tr>
             <tr>
                 <td>Date of the Class:</td>
-                <td><form:input path="dateClass" type="date"/></td>
+                <td><form:input path="dateClass" type="date" required="required"/></td>
             </tr>
             
             <tr>

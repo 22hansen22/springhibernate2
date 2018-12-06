@@ -73,7 +73,7 @@
 					<td>${classDay.dateClass}</td>
 					<td><a href="editClassDay?id=${classDay.id}">Edit</a>
 						&nbsp;&nbsp;&nbsp;&nbsp; <a
-						href="deletelassDay?id=${classDay.id}">Delete</a></td>
+						href="deleteClassDay?id=${classDay.id}">Delete</a></td>
 
 				</tr>
 			</c:forEach>

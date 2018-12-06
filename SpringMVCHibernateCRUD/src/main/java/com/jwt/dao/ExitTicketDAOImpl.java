@@ -6,10 +6,12 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.jwt.model.User;
+import com.jwt.controller.UserClassDayController;
 import com.jwt.model.ExitTicket;
 import com.jwt.model.SortByDate;
 
@@ -18,6 +20,10 @@ public class ExitTicketDAOImpl implements ExitTicketDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger log = Logger
+			.getLogger(ExitTicketDAOImpl.class);
+
 
 	public void addExitTicket(ExitTicket employee) {
 		sessionFactory.getCurrentSession().saveOrUpdate(employee);
@@ -65,7 +71,7 @@ public class ExitTicketDAOImpl implements ExitTicketDAO {
 		    }
 		    return listOfExitTicketIDs;
 	    }catch(Exception e) {
-			//log.error("An error occurred in listExitTicketsIds -", e);	
+			log.error("An error occurred in listExitTicketsIds -", e);	
 	    }
 		return null;
 	}

@@ -1,6 +1,7 @@
 package com.jwt.controller;
 
 import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,11 @@ import com.jwt.model.ExitTicket;
 import com.jwt.model.User;
 import com.jwt.model.UserExitTicket;
 import com.jwt.service.UserService;
+
+
+/*
+ * This class includes the home redirection not under /user (which would be the loggedin)
+ * */
 
 @Controller
 public class HomeController{

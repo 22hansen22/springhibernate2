@@ -30,8 +30,7 @@ import com.jwt.service.UserClassDayService;
 @RequestMapping("/user")
 public class UserController {
 
-	private static final Logger log = Logger
-			.getLogger(UserController.class);
+	private static final Logger log = Logger.getLogger(UserController.class);
 
 	public UserController() {
 		System.out.println("UserController()");
@@ -48,8 +47,9 @@ public class UserController {
 	@Autowired
 	private UserClassDayService userClassDayService;
 
+	//manage all the DB tables, extract all the records and display them
 	@RequestMapping(value = "/manageStudents")
-	public ModelAndView listUser(ModelAndView model) throws IOException {
+	public ModelAndView manageStudents(ModelAndView model) throws IOException {
 		List<User> listUser = userService.getAllUsers();
 		model.addObject("listUser", listUser);
 		
@@ -69,12 +69,15 @@ public class UserController {
 		return model;
 	}
 
+	//USER section ------------------------------------------------------------------------
+	
 	@RequestMapping(value = "/newUser", method = RequestMethod.GET)
-	public ModelAndView newContact(ModelAndView model) {
+	public ModelAndView newUser(ModelAndView model) {
 		User user = new User();
 		model.addObject("user", user);
 		model.setViewName("userForm");
 		
+		//in the form only allows the users to select either teacher of student
 		Map<String,String> typesOfUser = new LinkedHashMap<String,String>();
 		typesOfUser.put("student", "student");
 		typesOfUser.put("teacher", "teacher");
@@ -102,7 +105,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/editUser", method = RequestMethod.GET)
-	public ModelAndView editContact(HttpServletRequest request) {
+	public ModelAndView editUser(HttpServletRequest request) {
 		log.info("entro en edit User");
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = userService.getUser(userId);

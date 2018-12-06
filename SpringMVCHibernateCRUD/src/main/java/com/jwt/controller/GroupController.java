@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,9 +32,9 @@ public class GroupController {
 	
 	private static Logger log = Logger.getLogger(GroupController.class);
 	
+	
 	@RequestMapping(value={"/groupStudents"}, method = RequestMethod.GET)
-	public ModelAndView listStudents(){    
-		log.info("entro en teacherGroup");
+	public ModelAndView groupStudents(){    
 	    LinkedList<String> list = getStudentsRealNames();
 	    ModelAndView mv = new ModelAndView("groupStudents");
 	    mv.addObject("lists", list);
@@ -41,33 +42,48 @@ public class GroupController {
 	    return mv;
 	}
 	
+	//perform the grouping of the student list in mini groups
 	@RequestMapping(value={"/groupStudents"},params = "group", method = RequestMethod.GET)
-	public ModelAndView listStudents2(@RequestParam("groupSize")String groupSize){    
-		log.info("entro en group Students ");
-	    LinkedList<String> list = getStudentsRealNames();
+	public ModelAndView groupStudents2(@RequestParam("groupSize")String groupSize){    
+		log.info("Inside group Students ");
+	    LinkedList<String> listRealNames = getStudentsRealNames();
 	    ModelAndView mv = new ModelAndView("groupStudents");
-	    mv.addObject("lists", list);
+	    mv.addObject("listRealNames", listRealNames);
 	    
-	    LinkedList<String> listc=(LinkedList)list.clone();
-	    Collections.shuffle(listc);
-	    LinkedList<LinkedList<String>> slist = new LinkedList<LinkedList<String>>();
-	    //int groupSize=3;
-	    int groupSizex=Integer.parseInt(groupSize);
-	    int numGroups=listc.size()/groupSizex;
-	    if (listc.size() % groupSizex >0) numGroups+=1;
+	    LinkedList<String> listRealNamesTemp=(LinkedList)listRealNames.clone();
+	    Collections.shuffle(listRealNamesTemp);
+	    LinkedList<LinkedList<String>> listOfGroups = new LinkedList<LinkedList<String>>();
+	    
+	    int groupSizeParsed;
+	    try {
+	    	groupSizeParsed=Integer.parseInt(groupSize);
+	    }catch(Exception e) {
+	    	groupSizeParsed=2;
+	    }
+	    //preconditions
+	    if (groupSizeParsed<2) groupSizeParsed=2;
+	    else if (groupSizeParsed>5) groupSizeParsed=5;
+	    
+	    assert groupSizeParsed>=2 && groupSizeParsed<=5 : "range is incorrect";
+	    
+	    
+	    //diving the total list of students in subgroups
+	    int numGroups=listRealNamesTemp.size()/groupSizeParsed;
+	    if (listRealNamesTemp.size() % groupSizeParsed >0) numGroups+=1;
 	    for (int i=0; i<numGroups;i++) {
-	    	slist.add(new LinkedList<String>());
+	    	listOfGroups.add(new LinkedList<String>());
 	    }
 	    int counter1=0;
-	    for (int i=0; i<listc.size();i++) {
-	    	slist.get(counter1).add(listc.get(i));
-	    	if(((i+1) % groupSizex)==0)	counter1+=1;
+	    for (int i=0; i<listRealNamesTemp.size();i++) {
+	    	listOfGroups.get(counter1).add(listRealNamesTemp.get(i));
+	    	if(((i+1) % groupSizeParsed)==0)	counter1+=1;
 	    }
-	    mv.addObject("slists", slist);
-	    String gmsg="Making groups of "+groupSizex +" people";
+	    
+	    
+	    mv.addObject("listOfGroups", listOfGroups);
+	    String gmsg="Making groups of "+groupSizeParsed +" people";
 	    mv.addObject("gmsg", gmsg);
 
-	
 	    return mv;
 	}
 	
@@ -76,15 +92,14 @@ public class GroupController {
 	    LinkedList<String> list = new LinkedList<String>();
 	    
 	    //list all users
-	    log.info("Listing all users");
 
 	    try {
-		    List<User> listU=userService.getAllUsers();
-		    log.info("Im out "+listU.size());
-		    for (int i=0; i<listU.size(); i++) {
-		    	//only add students to the list 
-		    	if(listU.get(i).getType().equals("student")) {
-		    		list.add(listU.get(i).getRealname());
+		    List<User> listUsers=userService.getAllUsers();
+		    log.info("Im out "+listUsers.size());
+		    for (int i=0; i<listUsers.size(); i++) {
+		    	//only add students to the list - discard teachers
+		    	if(listUsers.get(i).getType().equals("student")) {
+		    		list.add(listUsers.get(i).getRealname());
 		    	}
 		    }
 		    return list;

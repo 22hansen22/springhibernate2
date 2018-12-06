@@ -25,21 +25,18 @@ public class LoginController {
 	
 	// Checks if the user credentials are valid or not.
 	@RequestMapping(value = "/validate", method = RequestMethod.POST)
-	public ModelAndView validateUsr(@RequestParam("username")String username,@RequestParam("password")String password, HttpSession session) {
+	public ModelAndView validateUser(@RequestParam("username")String username,@RequestParam("password")String password, HttpSession session) {
 		String msg = "";
 		String type="";
-		boolean isValid = userService.findUser(username, password);
 
 		ModelAndView mv=new ModelAndView();
 		User u=null;
-		if(isValid) {
+		
+		//if there is a user with that user name and password
+		if(userService.findUser(username, password)) {
 			msg = "Welcome " + username + "!";
 			u=userService.getUserByNameAndPassword(username, password);
 			type=u.getType();
-			
-			log.info("What type of user?= " + type);
-			//return new ModelAndView("result", "output", msg);	//output is the attribute
-			
 			
 			if(type.equals("student"))
 				mv.setViewName("homeStudent");
@@ -49,20 +46,17 @@ public class LoginController {
 			mv.addObject("type", type);
 			mv.addObject("userRealName", u.getRealname());
 			
-			//session Attributes
+			//session Attributes - saving the attributes to the cookie
 			session.setAttribute("username", username);
 			session.setAttribute("password", password);
 			session.setAttribute("userId", u.getId());
-			log.info("sessionID="+session.getId());
 			
 		} else {
 			log.info("invalid credentials");
 			msg = "Invalid credentials";
 			type="none";
-			//mv.setViewName("errorPage");
 			return new ModelAndView("redirect:/");
 		}
-		
 		
 		mv.addObject("output", msg);
 		return mv;
