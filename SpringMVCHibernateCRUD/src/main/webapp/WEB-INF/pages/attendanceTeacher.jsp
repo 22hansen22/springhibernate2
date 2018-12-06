@@ -171,7 +171,7 @@
 								<td>${rowData.realname}
 								
 								<c:if test="${not empty countCDPerUser}">
-								<span class="label label-pill label-primary">${countList[status.index]}</span>
+								<span class="label label-pill label-primary">${countCDPerUser[status.index]}</span>
 								</c:if>
 								</td>
 
